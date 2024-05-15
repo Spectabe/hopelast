@@ -13,7 +13,7 @@ class EventController extends Controller
         $userId = auth()->id();
         $events = Event::where('user_id', $userId)->get();
 
-        return response()->json($events);
+        return response()->json(['events' => $events], 201);
     }
 
     public function show(Request $request, $id)
@@ -75,6 +75,18 @@ class EventController extends Controller
         $event->user_id = auth()->id();
         $event->save();
 
-        return response()->json(['message' => 'Data uploaded successful'], 200);
+        return response()->json(['message' => 'Evento aggiunto correttamente'], 201);
     }
+
+    public function getEventsByDate(Request $request, $date)
+    {
+        $userId = auth()->id();
+
+        $events = Event::where('user_id', $userId)
+            ->whereDate('date_time_start', $date)
+            ->get();
+
+            return response()->json(['events' => $events], 201);
+    }
+
 }

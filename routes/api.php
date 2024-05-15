@@ -17,19 +17,19 @@ use Illuminate\Auth\Events\PasswordReset;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-// Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth:sanctum');
-
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 /*
 ==========================
     DBMS INTERACTIONS
 ==========================
 */
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () { // , 'verified'
     Route::get('event/all', [EventController::class, 'index']);
     Route::get('event/show/{id}', [EventController::class, 'show']);
     Route::post('event/add', [EventController::class, 'store']);
     Route::put('event/update/{id}', [EventController::class, 'update']);
+    Route::get('events/{date}', [EventController::class, 'getEventsByDate']);
 });
 
 /*
