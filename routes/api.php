@@ -9,20 +9,12 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 
-/*
-==========================
-    AUTH
-==========================
-*/
+// usare Accept: application/json per risp in json
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/check-token', [AuthController::class, 'checkToken'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-/*
-==========================
-    DBMS INTERACTIONS
-==========================
-*/
 
 Route::middleware(['auth:sanctum'])->group(function () { // , 'verified'
     Route::get('event/all', [EventController::class, 'index']);
@@ -32,14 +24,8 @@ Route::middleware(['auth:sanctum'])->group(function () { // , 'verified'
     Route::get('events/{date}', [EventController::class, 'getEventsByDate']);
 });
 
-/*
-==========================
-    FORGOT PASSWORD
-==========================
-*/
-
-// invia mail ok
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])
+// invio della mail
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendEmail'])
     ->middleware('guest')
     ->name('password.email');
 
@@ -53,12 +39,12 @@ Route::get('/reset-password/{token}', function (string $token, Request $request)
     ->middleware('guest')
     ->name('password.reset');
 
-// dalla view precedente fai una richiesta a questa rotta
+// da view precedente richiesta a questa rotta
 Route::post('/reset-password', function (Request $request) {
     $request->validate([
         'token' => 'required',
         'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
+        'password' => 'required|string|min:8|max:64',
     ]);
 
     $status = Password::reset(
@@ -80,11 +66,8 @@ Route::post('/reset-password', function (Request $request) {
         return response()->json(['error' => 'Password reset failed'], 400);
     }
 })->middleware('guest')->name('password.update');
-/*
-==========================
-    VERIFICA MAIL
-==========================
-*/
+
+// verifica mail
 
 Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'showPageForResultOfMailVerification'])
     ->middleware(['signed', 'throttle:6,1'])
@@ -92,7 +75,6 @@ Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, 'showPage
 
 // ! da provare
 // ! implementare throttle:6,1 in tutte le rotte
-// ! eliminare view predefinite tipo homepage
 Route::post('/email/verify/resend', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');

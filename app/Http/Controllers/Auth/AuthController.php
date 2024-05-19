@@ -66,4 +66,16 @@ public function logout(Request $request)
             'message' => "Logout effettuato correttamente",
         ], 201);
     }
+
+    public function checkToken(Request $request)
+{
+    $user = $request->user();
+
+    if ($user && $user->currentAccessToken()->tokenable_id === $user->id) {
+        return response()->json(['message' => 'Token valido'], 201);
+    }
+
+    return response()->json(['error' => 'Token non valido'], 401);
+}
+
 }

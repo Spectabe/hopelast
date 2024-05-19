@@ -16,13 +16,13 @@ class VerifyEmailController extends Controller
         $user = User::find($request->route('id'));
 
         if (!$user) {
-            $msg = 'Errore nel verificare la mail, contattaci hopelast532@gmail.com';
+            $msg = 'Errore nel verificare l\'email, contattaci hopelast532@gmail.com';
             return view('auth.mail-verification-page', ['message' => $msg]);
             // return redirect(env('FRONT_URL') . '/email/verify/error');
         }
 
         if ($user->hasVerifiedEmail()) {
-            $msg = 'Mail gia\' verificata';
+            $msg = 'Email gia\' verificata';
             return view('auth.mail-verification-page', ['message' => $msg]);
             // return redirect(env('FRONT_URL') . '/email/verify/already-success');
         }
@@ -31,7 +31,7 @@ class VerifyEmailController extends Controller
             event(new Verified($user));
         }
 
-        $msg = 'Mail verificata con successo';
+        $msg = 'Email verificata con successo';
         return view('auth.mail-verification-page', ['message' => $msg]);
         // return redirect(env('FRONT_URL') . '/email/verify/success');
     }

@@ -66,7 +66,6 @@ class EventController extends Controller
             return response()->json(['message' => $validator->messages()->first()], 422);
         }
 
-
         $event = new Event;
         $event->title = $request->title;
         $event->description = $request->description;

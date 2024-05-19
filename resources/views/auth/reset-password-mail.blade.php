@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verifica Email</title>
 </head>
-<style>
-    p {
-        font-size: 28px;
-    }
-</style>
 <body>
     <h1>Ciao {{ $user_name }}</h1>
     
