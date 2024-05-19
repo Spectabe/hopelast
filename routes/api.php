@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function () { // , 'verified'
     Route::post('event/add', [EventController::class, 'store']);
     Route::put('event/update/{id}', [EventController::class, 'update']);
     Route::get('events/{date}', [EventController::class, 'getEventsByDate']);
+    Route::delete('event/delete/{id}', [EventController::class, 'destroy']);
 });
 
 // invio della mail

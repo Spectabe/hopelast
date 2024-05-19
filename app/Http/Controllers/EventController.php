@@ -88,4 +88,20 @@ class EventController extends Controller
             return response()->json(['events' => $events], 201);
     }
 
+    public function destroy($id)
+    {
+        $event = Event::find($id);
+
+        if (!$event) {
+            return response()->json([
+                'message' => 'Evento non trovato'
+            ], 404);
+        }
+
+        $event->delete();
+
+        return response()->json([
+            'message' => 'Evento eliminato con successo'
+        ], 201);
+    }
 }

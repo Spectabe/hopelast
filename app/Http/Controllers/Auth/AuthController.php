@@ -78,4 +78,5 @@ public function logout(Request $request)
     return response()->json(['error' => 'Token non valido'], 401);
 }
 
+
 }
